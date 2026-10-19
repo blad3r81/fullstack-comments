@@ -1,6 +1,6 @@
 FROM php:8.2-apache-bookworm
-RUN apt-get update && apt-get install -y --no-install-recommends git unzip libicu-dev libonig-dev \
-    && docker-php-ext-install intl mbstring mysqli \
+RUN apt-get update && apt-get install -y --no-install-recommends git unzip libicu-dev libonig-dev libsqlite3-dev libzip-dev \
+    && docker-php-ext-install intl mbstring mysqli sqlite3 pdo_sqlite zip \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. set up document root for apache
@@ -20,7 +20,7 @@ COPY src/ /var/www/html/
 # so when we execute CLI commands, all the host file's ownership remains intact
 # otherwise command from inside container will create root-owned files and directories
 ARG uid
-RUN useradd -G www-data,root -u $uid -d /home/devuser devuser
+RUN useradd -U -G www-data,root -u $uid -d /home/devuser devuser
 RUN mkdir -p /home/devuser/.composer && \
     chown -R devuser:devuser /home/devuser
 

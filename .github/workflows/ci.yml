@@ -1,0 +1,25 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          sed -i "s/^UID=.*/UID=$(id -u)/" .env
+      - name: Build and start services
+        run: docker compose up -d --build db web
+      - name: Install dependencies
+        run: docker compose exec -T web composer install --no-interaction --prefer-dist
+      - name: Apply MySQL migration
+        run: docker compose exec -T web php spark migrate
+      - name: Run feature tests
+        run: docker compose exec -T web ./vendor/bin/phpunit --no-coverage
+      - name: Check HTTP response
+        run: curl --fail --silent --show-error http://localhost/ > /dev/null
