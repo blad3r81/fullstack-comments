@@ -75,7 +75,25 @@ class Database extends Config
     {
         parent::__construct();
 
-        $this->default['password'] = (string) (getenv('DB_PASSWORD') ?: '');
+        $databaseUrl = getenv('DATABASE_URL');
+        if ($databaseUrl) {
+            $parts = parse_url($databaseUrl);
+            if ($parts !== false) {
+                $this->default['hostname'] = $parts['host'] ?? 'db';
+                $this->default['username'] = rawurldecode($parts['user'] ?? '');
+                $this->default['password'] = rawurldecode($parts['pass'] ?? '');
+                $this->default['database'] = ltrim($parts['path'] ?? '', '/');
+                $this->default['port'] = $parts['port'] ?? 5432;
+                $this->default['DBDriver'] = 'Postgre';
+                $this->default['sslmode'] = 'require';
+            }
+        } else {
+            $this->default['hostname'] = getenv('DB_HOST') ?: 'db';
+            $this->default['username'] = getenv('DB_USER') ?: 'root';
+            $this->default['password'] = getenv('DB_PASSWORD') ?: '';
+            $this->default['database'] = getenv('DB_NAME') ?: 'codeigniter_db';
+            $this->default['port'] = (int) (getenv('DB_PORT') ?: 3306);
+        }
 
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that
