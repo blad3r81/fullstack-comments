@@ -1,0 +1,7 @@
+db_data/*
+
+apache_log/*
+.env
+src/.env
+src/vendor/
+local-comments.sqlite

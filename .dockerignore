@@ -1,0 +1,10 @@
+.git
+.env
+db_data
+local-comments.sqlite
+apache_log
+src/.env
+src/vendor
+src/writable/cache/*
+src/writable/logs/*
+src/writable/session/*
