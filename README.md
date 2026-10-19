@@ -2,6 +2,8 @@
 
 Небольшое приложение для обсуждения на PHP 8.2, CodeIgniter 4, MySQL 8, jQuery 3 и Bootstrap 4. Исходное тестовое задание: [vad23klev/fullstack-test](https://github.com/vad23klev/fullstack-test).
 
+[Открыть демо](https://fullstack-comments.vercel.app/). Публичная версия работает на Vercel с Neon Postgres; локальная сборка по заданию использует MySQL 8.
+
 ## Запуск
 
 Нужны Docker и Docker Compose. Перед первым запуском создайте локальный файл настроек:

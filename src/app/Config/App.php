@@ -22,7 +22,9 @@ class App extends BaseConfig
     {
         parent::__construct();
 
-        $host = getenv('VERCEL_URL');
+        $host = getenv('VERCEL_ENV') === 'production'
+            ? (getenv('VERCEL_PROJECT_PRODUCTION_URL') ?: getenv('VERCEL_URL'))
+            : getenv('VERCEL_URL');
         if ($host) {
             $this->baseURL = 'https://' . $host . '/';
         }
